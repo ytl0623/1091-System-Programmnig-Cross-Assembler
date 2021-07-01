@@ -1,0 +1,52 @@
+10727124 資訊三甲 劉宇廷 Cross Assembler
+
+一、開發平台:
+  Windows 10家用版 64位元作業系統 x64型處理器
+
+二、使用開發環境:
+  Dev C++
+
+三、使用的程式語言:
+  C/C++
+
+四、所選擇的組合語言:
+  SIC/SICXE
+
+五、程式設計:
+  ．功能
+    以讀檔的方式讀入input檔(檔名為手動輸入)，完成Cut token的操作，利用老師提供的Table1-4進行opcode、pseudocode、register、delimiter的分類，其餘狀況使用sum(ASCII) % 100的hash function放入(碰撞則index+1) table5-7，依序分類symbol(label)、integer、string，並將結果儲存至LexicalAnalysis.txt中，接者根據使用者輸入相關的組合語言種類(SIC/SICXE)，依序執行SIC_Pass1(SICXE_Pass1)、SIC_Pass2(SICXE_Pass2)，最後將結果輸出至Assembler.txt中。
+
+  ．流程
+    在main()中請使用者輸入指令(SIC/SICXE)，一開始先執行SetTable()，把Table1-4的內容讀入，接者根據輸入的指令執行SIC_pass1/2()、SICXE_Pass1/2()，pass1主要是之前的Cut Token，並將結果儲存起來，之後形成Token Group做Syntax 的檢查，
+pass2則是翻譯成object code的過程。
+
+  ．使用的data structure
+
+    // 儲存單一個token的類別、序號以及內容
+    typedef struct TokenData {
+      int type ;
+      int number ;
+      string token ;
+    } TokenData ;
+
+    // table內的資料利用vector串列來儲存
+    vector<TokenData> opCodeTable ;
+    vector<TokenData> pseudoTable ;
+    vector<TokenData> registerTable ;
+    vector<TokenData> delimiterTable ;
+    vector<TokenData> labelTable ;
+    vector<TokenData> integerTable ;
+    vector<TokenData> stringTable ;
+
+    // 處理過程會需要用到的參數
+    typedef int int2[2] ;     // table, entry
+    typedef char word[WORDLENGTH] ;
+    typedef char str100[100] ;
+    typedef bool type[4] ;     // format1-4
+    typedef word word10[10] ;
+
+  ．未完成的功能
+    FIX指令尚未處理完畢。
+
+六、心得:
+  一開始沒想太多就決定寫x86的格式了，但後來發現大部分同學都寫SIC，導致有些小bug同學無法給予太多的幫助，而且之後要寫Assembler也很頭痛，但其實x86的架構算是滿清楚明瞭的，舉例來說: 直接定址在x86只需判斷數字及‘H’字元即可，但在SIC還要注意各種情形，例如: X'F1'代表16進位的F1，C'EOF'代表EOF字串，其中‘X’及‘C’不用翻，雖然沒寫過SIC的，但感覺很麻煩。
